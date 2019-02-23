@@ -1,6 +1,7 @@
 package osu.carlift;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,9 +23,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -41,6 +46,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText mUserNameField;
     private EditText mPassWordField;
     private Button mConfirmSignup;
+    private static final String EXTRA_USERNAME="userName";
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -95,10 +101,10 @@ public class SignupActivity extends AppCompatActivity {
 
     }
 
-    public   void SignupRequest(final String accountNumber, final String password) {
+    public   void SignupRequest(final String userName, final String password) {
         //请求地址
         String url = "http://www.hygg.com.ngrok.io/Carlift_Hanyin/SignupServlet";
-        String tag = "SignupServlet";    //注②
+        String tag = "SignupServlet"+userName;    //注②
 
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(SignupActivity.this);
@@ -117,6 +123,9 @@ public class SignupActivity extends AppCompatActivity {
                             if (result.equals("success")) {  //注⑤
                                 //做自己的登录成功操作，如页面跳转
                                 Toast.makeText(SignupActivity.this,R.string.signup_sucess,Toast.LENGTH_LONG).show();
+                                Intent intent=new Intent(SignupActivity.this,LoginActivity.class);
+                                intent.putExtra(EXTRA_USERNAME,userName);
+                                startActivity(intent);
                             } else {
                                 //做自己的登录失败操作，如Toast提示
                                 Toast.makeText(SignupActivity.this,R.string.signup_fail,Toast.LENGTH_LONG).show();
@@ -130,15 +139,34 @@ public class SignupActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //做自己的响应错误操作，如Toast提示（“请稍后重试”等）
+                if(error!=null){
+                    if(error instanceof TimeoutError){
+                        Toast.makeText(SignupActivity.this,"网络请求超时，请重试！",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if(error instanceof ServerError) {
+                        Toast.makeText(SignupActivity.this,"服务器异常",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if(error instanceof NetworkError) {
+                        Toast.makeText(SignupActivity.this,"请检查网络",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if(error instanceof ParseError) {
+                        Toast.makeText(SignupActivity.this,"数据格式错误",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                }
+                Toast.makeText(SignupActivity.this,error.getMessage(),Toast.LENGTH_SHORT).show();
                 Log.e("TAG", error.getMessage(), error);
             }
         }) {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams()  {
                 Map<String, String> params = new HashMap<>();
-                params.put("AccountNumber", accountNumber);  //注⑥
-                params.put("Password", password);
+                params.put("userName", userName);  //注⑥
+                params.put("passWord", password);
                 return params;
             }
         };
