@@ -33,8 +33,8 @@ public class SelectMode extends AppCompatActivity {
         mdrivermode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(SelectMode.this,DebugActivity.class);
-                //intent.putExtra(EXTRA_USERNAME,userName);
+                Intent intent=new Intent(SelectMode.this,RequestListActivity.class);
+                intent.putExtra(EXTRA_USERNAME,userName);
                 startActivity(intent);
 
             }

@@ -8,25 +8,36 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Please select your mode"
+        android:id="@+id/navigation_startpoint_text"
         android:gravity="center"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Passenger Mode"
-        android:id="@+id/select_passenger_button"
+        android:text="Begin navigation to starting place"
+        android:id="@+id/navigation_start_point_button"
+        android:background="@drawable/button_circle_shape"
+        android:textColor="#ffffff"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/navigation_destination_text"
+        android:gravity="center"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Begin navigation to the destination"
+        android:id="@+id/navigation_destination_button"
         android:background="@drawable/button_circle_shape"
         android:textColor="#ffffff"/>
     <android.support.v7.widget.ContentFrameLayout
         android:layout_width="match_parent"
-        android:layout_height="10dp"></android.support.v7.widget.ContentFrameLayout>
+        android:layout_height="20dp"></android.support.v7.widget.ContentFrameLayout>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Driver Mode"
-        android:id="@+id/select_driver_button"
+        android:text="Abandon this request"
+        android:id="@+id/navigation_abandon"
         android:background="@drawable/button_circle_shape"
         android:textColor="#ffffff"/>
-
 
 </LinearLayout>

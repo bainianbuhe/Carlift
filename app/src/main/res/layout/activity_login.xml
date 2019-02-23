@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/background1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    android:layout_margin="24dp">
+    android:gravity="center">
     <TextView
-        style="?android:listSeparatorTextViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="UserName"/>
@@ -15,7 +14,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/user_name_edit"/>
     <TextView
-        style="?android:listSeparatorTextViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Password"/>
@@ -27,7 +25,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Login"
-        android:id="@+id/confirm_login_button"/>
+        android:id="@+id/confirm_login_button"
+        android:background="@drawable/button_circle_shape"
+        android:textColor="#ffffff"
+        />
+
+
 
 
 </LinearLayout>

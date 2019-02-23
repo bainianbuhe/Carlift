@@ -3,4 +3,11 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="red">#ff0000</color><!--红色 -->
+    <color name="indianred">#cd5c5c</color><!--印第安红 -->
+    <color name="deeppink">#ff1493</color><!--深粉红色 -->
+    <color name="fuchsia">#ff00ff</color><!--紫红色 -->
+    <color name="magenta">#ff00ff</color><!--红紫色 -->
+    <color name="darkmagenta">#8b008b</color><!--暗洋红 -->
+    <color name="darkred">#8b0000</color><!--暗红色 -->
 </resources>

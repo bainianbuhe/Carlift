@@ -1,5 +1,6 @@
 package osu.carlift;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,7 +36,13 @@ public class RequestListFragment extends Fragment {
     private RecyclerView mRequestRecyclerView;
     private RequestAdapter mAdapter;
     private String driverUserName;
-
+    private final String EXTRA_DRIVER_USERNAME="driver_user_name";
+    private final String EXTRA_START_TIME="start_time";
+    private final String EXTRA_START_POINT="start_point";
+    private final String EXTRA_DESTINATION="destination";
+    private final String EXTRA_PASSENGER_USERNAME="passenger_user_name";
+    public void setDriverUserName(String driverusername)
+    {driverUserName=driverusername;}
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState)
     {
@@ -49,17 +56,18 @@ public class RequestListFragment extends Fragment {
     public void updateUI()
 
     {
-        ArrayList<CarliftRequest> carliftrequests=SeeRequestsRequest(new VolleyCallback() {
+        SeeRequestsRequest(new VolleyCallback() {
             @Override
-            public ArrayList<CarliftRequest> onSuccess(ArrayList<CarliftRequest> result) {
-                return result;
+            public void onSuccess(ArrayList<CarliftRequest> result) {
+                ArrayList<CarliftRequest> carliftrequests= result;
+                Log.e("TAG3","updateuilength"+carliftrequests.size());
+                mAdapter=new RequestAdapter(carliftrequests);
+                mRequestRecyclerView.setAdapter(mAdapter);
             }
         });
-        Log.e("TAG3","updateuilength"+carliftrequests.size());
-      mAdapter=new RequestAdapter(carliftrequests);
-      mRequestRecyclerView.setAdapter(mAdapter);
+
     }
-    private class RequestHolder extends RecyclerView.ViewHolder
+    private class RequestHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         private CarliftRequest mRequest;
         private TextView mUserNameTextView;
@@ -73,7 +81,20 @@ public class RequestListFragment extends Fragment {
             mStartPointTextView =(TextView) itemView.findViewById(R.id.starting_point_text);
             mDestinationTextView=(TextView) itemView.findViewById(R.id.destination_text);
             mStartTimeTextView=(TextView) itemView.findViewById(R.id.start_time_text);
+            itemView.setOnClickListener(this);
 
+        }
+        @Override
+        public void onClick(View view)
+        {
+            Log.e("TAG5","click!");
+            Intent intent =new Intent(getActivity().getApplicationContext(),RequestDetailActivity.class);
+            intent.putExtra(EXTRA_DRIVER_USERNAME,driverUserName);
+            intent.putExtra(EXTRA_PASSENGER_USERNAME,mRequest.getUserName());
+            intent.putExtra(EXTRA_START_POINT,mRequest.getStartPoint());
+            intent.putExtra(EXTRA_DESTINATION,mRequest.getDestination());
+            intent.putExtra(EXTRA_START_TIME,mRequest.getStartTime());
+            startActivity(intent);
         }
         public void bind(CarliftRequest carliftRequest)
         {
@@ -107,7 +128,7 @@ public class RequestListFragment extends Fragment {
         {return mrequests.size();}
     }
 
-    public ArrayList<CarliftRequest> SeeRequestsRequest(final VolleyCallback callback) {
+    public void SeeRequestsRequest(final VolleyCallback callback) {
         //请求地址
         final ArrayList<CarliftRequest> carlift_requests=new ArrayList<>();
         String url = "http://www.hygg.com.ngrok.io/Carlift_Hanyin/SeeRequestServlet";
@@ -191,10 +212,9 @@ public class RequestListFragment extends Fragment {
 
         //将请求添加到队列中
         requestQueue.add(request);
-        return carlift_requests;
     }
     private interface VolleyCallback{
-        ArrayList<CarliftRequest> onSuccess(ArrayList<CarliftRequest> result);
+       void onSuccess(ArrayList<CarliftRequest> result);
     }
 
 
