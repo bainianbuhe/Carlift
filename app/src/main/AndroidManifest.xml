@@ -47,7 +47,6 @@
         //tools:replace="android:value"
         <activity android:name=".SelectMode" />
         <activity android:name=".UserAddRequest" />
-        <activity android:name=".DriverActivity" />
         <activity android:name=".RequestListActivity" />
         <activity android:name=".RequestDetailActivity" />
         <activity android:name=".NavigationActivity"></activity>

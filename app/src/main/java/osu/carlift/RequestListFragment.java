@@ -131,7 +131,7 @@ public class RequestListFragment extends Fragment {
     public void SeeRequestsRequest(final VolleyCallback callback) {
         //请求地址
         final ArrayList<CarliftRequest> carlift_requests=new ArrayList<>();
-        String url = "http://www.hygg.com.ngrok.io/Carlift_Hanyin/SeeRequestServlet";
+        String url = "http://13.68.221.218:8089/Carlift_Hanyin/SeeRequestServlet";
         String tag = "SeeRequestServlet"+driverUserName;    //注②
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());

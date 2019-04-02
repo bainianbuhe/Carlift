@@ -91,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     public   void LoginRequest(final String userName, final String password) {
         //请求地址
-        String url = "http://www.hygg.com.ngrok.io/Carlift_Hanyin/LoginServlet";
+        String url = "http://13.68.221.218:8089/Carlift_Hanyin/LoginServlet";
         String tag = "LoginServlet"+userName;    //注②
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(this);

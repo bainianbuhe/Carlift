@@ -103,7 +103,7 @@ public class SignupActivity extends AppCompatActivity {
 
     public   void SignupRequest(final String userName, final String password) {
         //请求地址
-        String url = "http://www.hygg.com.ngrok.io/Carlift_Hanyin/SignupServlet";
+        String url = "http://13.68.221.218:8089/Carlift_Hanyin/SignupServlet";
         String tag = "SignupServlet"+userName;    //注②
 
         //取得请求队列

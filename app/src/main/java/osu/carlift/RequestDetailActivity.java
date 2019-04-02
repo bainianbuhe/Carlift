@@ -137,7 +137,7 @@ public class RequestDetailActivity extends AppCompatActivity {
     //Parameters that should be sent:username, starting point,destination,time,isActive
     public   void AcceptRequest(final String userName) {
         //请求地址
-        String url = "http://www.hygg.com.ngrok.io/Carlift_Hanyin/HandleIsActiveServlet";
+        String url = "http://13.68.221.218:8089/Carlift_Hanyin/HandleIsActiveServlet";
         String tag = "HandleRequestAcceptServlet"+userName;    //注②
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(this);

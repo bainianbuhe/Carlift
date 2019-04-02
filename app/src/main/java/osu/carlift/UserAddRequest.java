@@ -173,7 +173,7 @@ public class UserAddRequest extends AppCompatActivity {
 
     public   void addRequest(final String userName, final String startingPoint, final String destination, final String startTime) {
         //请求地址
-        String url = "http://www.hygg.com.ngrok.io/Carlift_Hanyin/AddRequestServlet";
+        String url = "http://13.68.221.218:8089/Carlift_Hanyin/AddRequestServlet";
         String tag = "AddRequestServlet"+userName;    //注②
 
         //取得请求队列
