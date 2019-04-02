@@ -13,7 +13,9 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-
+    <permission
+        android:name="com.example.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -25,6 +27,12 @@
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
         <activity android:name=".Welcome">
             <intent-filter>
@@ -49,6 +57,7 @@
         <activity android:name=".UserAddRequest" />
         <activity android:name=".RequestListActivity" />
         <activity android:name=".RequestDetailActivity" />
+        <activity android:name=".SelectLocationActivity" />
         <activity android:name=".NavigationActivity"></activity>
     </application>
 

@@ -5,55 +5,12 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@drawable/background1">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Set your starting part and destination"
-        android:gravity="center"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="You should make sure the location typed in can be recognizaed by google map"
-        android:gravity="center"
-        android:textSize="13dp"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Address of your starting point"
-        android:gravity="center"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        />
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/exact_start_adress"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Check the correctness of your starting point"
-        android:id="@+id/check_starting_point"
-        android:background="@drawable/button_circle_shape"
-        android:textColor="#ffffff"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Address of your destination"
-        android:gravity="center"
-        android:textSize="20dp"
-        android:background="@drawable/linearborder"
-        android:textStyle="bold"
-        />
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/exact_dest_adress"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Check the correctness of your destination"
-        android:id="@+id/check_destination"
+        android:text="Select your starting place and destination"
+        android:id="@+id/select_place"
         android:background="@drawable/button_circle_shape"
         android:textColor="#ffffff"/>
     <TextView

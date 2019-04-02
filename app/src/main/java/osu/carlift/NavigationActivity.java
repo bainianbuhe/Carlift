@@ -115,7 +115,7 @@ public class NavigationActivity extends AppCompatActivity {
     }
     public   void AbandonRequest(final String userName) {
         //请求地址
-        String url = "http://www.hygg.com.ngrok.io/Carlift_Hanyin/HandleIsActiveServlet";
+        String url = "http://13.68.221.218:8089/Carlift_Hanyin/HandleIsActiveServlet";
         String tag = "HandleRequestNaviServlet"+userName;    //注②
         //取得请求队列
         RequestQueue requestQueue = Volley.newRequestQueue(this);

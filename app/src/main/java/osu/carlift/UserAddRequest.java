@@ -36,58 +36,25 @@ import java.util.List;
 import java.util.Map;
 
 public class UserAddRequest extends AppCompatActivity {
-    private EditText mStartAdddr;
-    private EditText mDestinationAddr;
-    private Button mCheckStart;
-    private Button mCheckDesti;
+
     private Button mAddRequest;
+    private Button mSelectLocation;
     private EditText mStartTime;
     private String startAddr="";
     private String destinationAddr="";
     private String startTime="";
     private String userName="";
+    private static final String TAG="UserAddRequest";
     private static final String EXTRA_USERNAME="userName";
+    private static final String EXTRA_START_ADDR="start_addr";
+    private static final String EXTRA_DESTINATION="destination";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_add_request);
         userName=getIntent().getStringExtra(EXTRA_USERNAME);
         Log.e("TAG", "username is "+userName);
-        mStartAdddr = (EditText) findViewById(R.id.exact_start_adress);
-        mStartAdddr.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                startAddr = s.toString();
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        mDestinationAddr = (EditText) findViewById(R.id.exact_dest_adress);
-        mDestinationAddr.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                destinationAddr = s.toString();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
         mStartTime = (EditText) findViewById(R.id.start_time);
         mStartTime.addTextChangedListener(new TextWatcher() {
             @Override
@@ -106,56 +73,36 @@ public class UserAddRequest extends AppCompatActivity {
 
             }
         });
-        mCheckStart = (Button) findViewById(R.id.check_starting_point);
-        mCheckStart.setOnClickListener(new View.OnClickListener() {
+        mSelectLocation=(Button) findViewById(R.id.select_place);
+        mSelectLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                googleMapSearch(startAddr);
-            }
-        });
-        mCheckDesti=(Button)findViewById(R.id.check_destination);
-        mCheckDesti.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                googleMapSearch(destinationAddr);
+                Intent intent=new Intent(UserAddRequest.this,SelectLocationActivity.class);
+                intent.putExtra(EXTRA_USERNAME,userName);
+                finish();
+                startActivity(intent);
             }
         });
         mAddRequest=(Button)findViewById(R.id.confirm_add_dest);
         mAddRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addRequest(userName,startAddr,destinationAddr,startTime);
+                startAddr=getIntent().getStringExtra(EXTRA_DESTINATION);
+                destinationAddr=getIntent().getStringExtra(EXTRA_START_ADDR);
+                if (startAddr!=null&&destinationAddr!=null){
+                Log.d(TAG,startAddr+destinationAddr+startTime+userName);
+                addRequest(userName,startAddr,destinationAddr,startTime);}
+                else{
+                    Toast.makeText(UserAddRequest.this,"Please select your starting place and destination first",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
 
 
-    }
-    protected void googleMapSearch(String place)
-    {
-        if (isAvailible(UserAddRequest.this, "com.google.android.apps.maps")) {
-            //Uri gmmIntentUri = Uri.parse("google.navigation:q="
-            //   + mLatitude + "," + mLongitude
-            //  );
-            Uri gmmIntentUri = Uri.parse("geo:0,0?q="+place
-            );
-            //+"+Columbus," + "+Ohio,"+"United States"
-            //"google.navigation:q="
-            //                      + "344 Stinchcomb Drive"
-            Intent mapIntent = new Intent(Intent.ACTION_VIEW,
-                    gmmIntentUri);
-            mapIntent.setPackage("com.google.android.apps.maps");
-            UserAddRequest.this.startActivity(mapIntent);
-        } else {
-            Toast.makeText(UserAddRequest.this, "You should install GoogleMap first", Toast.LENGTH_LONG)
-                    .show();
-            Uri uri = Uri
-                    .parse("market://details?id=com.google.android.apps.maps");
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            UserAddRequest.this.startActivity(intent);
-        }
 
     }
+
     public static boolean isAvailible(Context context, String packageName) {
         final PackageManager packageManager = context.getPackageManager();
         List<PackageInfo> packageInfos = packageManager.getInstalledPackages(0);
