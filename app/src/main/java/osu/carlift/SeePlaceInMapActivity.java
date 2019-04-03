@@ -17,6 +17,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.webkit.WebView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -51,12 +52,12 @@ import java.util.List;
 import java.util.Arrays;
 
 
-public class SelectLocationActivity extends AppCompatActivity implements OnMapReadyCallback,AsyncResponse,GoogleApiClient.OnConnectionFailedListener {
+public class SeePlaceInMapActivity extends AppCompatActivity implements OnMapReadyCallback,AsyncResponse,GoogleApiClient.OnConnectionFailedListener {
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
-    private static final String TAG = "SelectLocationActivity";
+    private static final String TAG = "SeePlaceInMapActivity";
     private static final String EXTRA_USERNAME="userName";
     private static final String EXTRA_START_ADDR="start_addr";
     private static final String EXTRA_DESTINATION="destination";
@@ -76,75 +77,52 @@ public class SelectLocationActivity extends AppCompatActivity implements OnMapRe
     private static Context context;
     private PlaceInfo placeInfo;
     //widgets
-    private AutoCompleteTextView mSearchText;
-    private double latitudeCur;
-    private double latitudeDes;
-    private Button mConfirmStartingPlace;
-    private Button mConfirmDestination;
-    private Button mConfirmAllSet;
-    private double longitudeCur;
-    private double longitudeDes;
-    private double dis;
-    private String title;
+    private Button mSeeStartingPlace;
+    private Button mSeeDestination;
     private ImageView mWebSite;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         context=getApplicationContext();
-        setContentView(R.layout.activity_select_location);
+        setContentView(R.layout.activity_see_place_in_map);
         getLocationPermission();
-        //String s = ((MyApplication) getApplication()).getLocation();
-        userName=getIntent().getStringExtra(EXTRA_USERNAME);
-        String s = getIntent().getStringExtra("Get_Location");
-        mSearchText=(AutoCompleteTextView) findViewById(R.id.input_search);
-        mSearchText.setMaxLines(1);
-        mSearchText.setInputType(InputType.TYPE_CLASS_TEXT);
-        mSearchText.setText(s);
-        mConfirmStartingPlace=(Button)findViewById(R.id.confirm_starting_point_button);
-        mConfirmDestination=(Button)findViewById(R.id.confirm_destination_button);
-        mConfirmAllSet=(Button)findViewById(R.id.confirm_all_done);
-        mConfirmStartingPlace.setOnClickListener(new View.OnClickListener() {
+        startAddr = getIntent().getStringExtra(EXTRA_START_ADDR);
+        destinationAddr=getIntent().getStringExtra(EXTRA_DESTINATION);
+        mSeeDestination=(Button)findViewById(R.id.see_destination_button);
+        mSeeDestination.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startAddr=title;
+                geoLocate(destinationAddr);
             }
         });
-        mConfirmDestination.setOnClickListener(new View.OnClickListener() {
+        mSeeStartingPlace=(Button)findViewById(R.id.see_starting_place_button);
+        mSeeStartingPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                destinationAddr=title;
+                geoLocate(startAddr);
             }
         });
-        mConfirmAllSet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(SelectLocationActivity.this,UserAddRequest.class);
-                intent.putExtra(EXTRA_USERNAME,userName);
-                intent.putExtra(EXTRA_START_ADDR,startAddr);
-                intent.putExtra(EXTRA_DESTINATION,destinationAddr);
-                finish();
-                startActivity(intent);
-            }
-        });
-        mWebSite=findViewById(R.id.go_to_website);
+        mWebSite=findViewById(R.id.go_to_website_driver);
         mWebSite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (placeInfo==null)
-                {Toast.makeText(SelectLocationActivity.this,"Please click on one of the two buttons below first!",Toast.LENGTH_SHORT).show();}
+                {Toast.makeText(SeePlaceInMapActivity.this,"Please click on one of the two buttons below first!",Toast.LENGTH_SHORT).show();
+                }
                 else{
                 if (placeInfo.getWebsiteUri() != null) {
-                    Intent intent=new Intent(SelectLocationActivity.this,WebViewActivity.class);
+                    Intent intent=new Intent(SeePlaceInMapActivity.this,WebViewActivity.class);
                     Log.d(TAG,"uri here"+placeInfo.getWebsiteUri());
                     intent.putExtra("url",placeInfo.getWebsiteUri().toString());
                     startActivity(intent);
                 } else {
-                    Toast.makeText(SelectLocationActivity.this, "you have not searched for a place yet or cannot find website for the current place",
-                            Toast.LENGTH_SHORT).show();
                 }
-            }}
+            }
+            }
         });
+
+
 
     }
 
@@ -176,7 +154,7 @@ public class SelectLocationActivity extends AppCompatActivity implements OnMapRe
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "map is ready");
-        Toast.makeText(SelectLocationActivity.this, "Map is Ready", Toast.LENGTH_SHORT).show();
+        Toast.makeText(SeePlaceInMapActivity.this, "Map is Ready", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
 
         if (mLocationPermissionsGranted) {
@@ -186,7 +164,6 @@ public class SelectLocationActivity extends AppCompatActivity implements OnMapRe
             }
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
-            init();
         }
     }
     private void getDeviceLocation(){
@@ -203,12 +180,10 @@ public class SelectLocationActivity extends AppCompatActivity implements OnMapRe
                     public void onComplete(@NonNull Task task) {
                         if(task.isSuccessful()&&task.getResult()!=null){
                             Location currentLocation = (Location) task.getResult();
-                                moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                                        DEFAULT_ZOOM, "My Location");
-                                latitudeCur = currentLocation.getLatitude();
-                                longitudeCur = currentLocation.getLongitude();
+                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
+                                    DEFAULT_ZOOM, "My Location");
                         }else{
-                            Toast.makeText(SelectLocationActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SeePlaceInMapActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -235,7 +210,7 @@ public class SelectLocationActivity extends AppCompatActivity implements OnMapRe
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
         mMap.clear();
-        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(SelectLocationActivity.this));
+        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(SeePlaceInMapActivity.this));
         if(placeInfo != null){
             try{
                 String snippet = "Address: " + placeInfo.getAddress() + "\n" +
@@ -266,47 +241,19 @@ public class SelectLocationActivity extends AppCompatActivity implements OnMapRe
         Log.d(TAG,"initing map");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
-        mapFragment.getMapAsync(SelectLocationActivity.this);
+        mapFragment.getMapAsync(SeePlaceInMapActivity.this);
     }
-    private void init(){
-        Log.d(TAG,"initializing searching bar");
-        mGoogleApiClient = new GoogleApiClient
-                .Builder(this)
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage(this, this)
-                .build();
-
-
-
-        mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if(actionId == EditorInfo.IME_ACTION_SEARCH
-                        || actionId == EditorInfo.IME_ACTION_DONE
-                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
-                        || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
-
-                    //execute our method for searching
-                    geoLocate();
-                }
-
-                return false;
-            }
-        });
-    }
-    private void geoLocate() {
+    private void geoLocate(String title) {
         Log.d(TAG, "geoLocate: geolocating");
 
-        title = mSearchText.getText().toString();
         Log.d(TAG, "searchString is " + title);
-        GetLocationDownloadTask getLocationDownloadTask = new GetLocationDownloadTask();
+        GetLocationDownloadTaskDriver getLocationDownloadTaskDriver = new GetLocationDownloadTaskDriver();
         // Log.d(TAG,"address got is "+locationJSONObject.toString());
         String searchString = "https://maps.googleapis.com/maps/api/geocode/json?address=" + title + "&key=AIzaSyA_UcjRk9RCmhLG4YvrCgJT8qNPplZwlZ0";
         searchString = searchString.replaceAll(" ", "+");
-        getLocationDownloadTask.execute(searchString);
+        getLocationDownloadTaskDriver.execute(searchString);
 
-        getLocationDownloadTask.completionCode = new GetLocationDownloadTask.AsyncIfc() {
+        getLocationDownloadTaskDriver.completionCode = new GetLocationDownloadTaskDriver.AsyncIfc() {
 
             @Override
             public void onComplete(PlaceInfo place_info)
@@ -336,5 +283,4 @@ public class SelectLocationActivity extends AppCompatActivity implements OnMapRe
 
 
 }
-
 

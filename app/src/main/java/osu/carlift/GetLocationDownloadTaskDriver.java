@@ -24,11 +24,11 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class GetLocationDownloadTask extends AsyncTask<String, Void, PlaceInfo> {
+public class GetLocationDownloadTaskDriver extends AsyncTask<String, Void, PlaceInfo> {
     public AsyncResponse delegate = null;
-    Context context=SelectLocationActivity.getContext();
+    Context context=SeePlaceInMapActivity.getContext();
     public interface AsyncIfc {
-         void onComplete(PlaceInfo placeInfo);
+        void onComplete(PlaceInfo placeInfo);
     }
     public AsyncIfc completionCode;
     private static final String TAG = "SelectLocationActivity";
@@ -79,36 +79,36 @@ public class GetLocationDownloadTask extends AsyncTask<String, Void, PlaceInfo> 
     @Override
     protected void onPostExecute(PlaceInfo result) {
 
-            if (result !=null) {
-                GetDetailDownloadTask getDetailDownloadTask = new GetDetailDownloadTask();
-                String placeId = result.getId();
-                String searchDetailString = "https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeId + "&fields=name,rating,website,formatted_phone_number&key=AIzaSyAs32Ct45KI1dsEL6gYwni-BnW7pGDiYoA";
-                Log.d(TAG, "url in the async task is" + searchDetailString);
-                getDetailDownloadTask.execute(searchDetailString);
-                getDetailDownloadTask.completionCode = new GetDetailDownloadTask.AsyncIfc() {
+        if (result !=null) {
+            GetDetailDownloadTask getDetailDownloadTask = new GetDetailDownloadTask();
+            String placeId = result.getId();
+            String searchDetailString = "https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeId + "&fields=name,rating,website,formatted_phone_number&key=AIzaSyAs32Ct45KI1dsEL6gYwni-BnW7pGDiYoA";
+            Log.d(TAG, "url in the async task is" + searchDetailString);
+            getDetailDownloadTask.execute(searchDetailString);
+            getDetailDownloadTask.completionCode = new GetDetailDownloadTask.AsyncIfc() {
 
-                    @Override
-                    public void onComplete(JSONObject jsonObject) {
-                        JSONObject infoJSONObject = jsonObject;
-                        Log.d(TAG, "the returned info jSONObject is " + infoJSONObject);
-                        try {
-                            if (infoJSONObject.getJSONObject("result").getString("website").length()==0)
-                            {
-                                placeInfo.setWebsiteUri(Uri.parse(("Cannot find the website")));
-                            }
-                            else{
-                            placeInfo.setWebsiteUri(Uri.parse(infoJSONObject.getJSONObject("result").getString("website")));}
-                            placeInfo.setPhoneNumber(infoJSONObject.getJSONObject("result").getString("formatted_phone_number"));
-                            placeInfo.setName(infoJSONObject.getJSONObject("result").getString("name"));
-                            placeInfo.setRating((float)infoJSONObject.getJSONObject("result").getDouble("rating"));
-                        } catch (JSONException e) {
-                            Log.e(TAG,e.toString());
+                @Override
+                public void onComplete(JSONObject jsonObject) {
+                    JSONObject infoJSONObject = jsonObject;
+                    Log.d(TAG, "the returned info jSONObject is " + infoJSONObject);
+                    try {
+                        if (infoJSONObject.getJSONObject("result").getString("website").length()==0)
+                        {
+                            placeInfo.setWebsiteUri(Uri.parse(("Cannot find the website")));
                         }
-                        completionCode.onComplete(placeInfo);
+                        else{
+                            placeInfo.setWebsiteUri(Uri.parse(infoJSONObject.getJSONObject("result").getString("website")));}
+                        placeInfo.setPhoneNumber(infoJSONObject.getJSONObject("result").getString("formatted_phone_number"));
+                        placeInfo.setName(infoJSONObject.getJSONObject("result").getString("name"));
+                        placeInfo.setRating((float)infoJSONObject.getJSONObject("result").getDouble("rating"));
+                    } catch (JSONException e) {
+                        Log.e(TAG,e.toString());
                     }
-                };
+                    completionCode.onComplete(placeInfo);
+                }
+            };
 
-            }
+        }
     }
 
     public JSONObject getLocationInfo(String url) {

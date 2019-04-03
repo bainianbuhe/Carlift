@@ -50,7 +50,9 @@
         android:layout_alignParentEnd="false"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="64dp"
-        android:text="Confirm starting place" />
+        android:text="Confirm starting place"
+        android:background="@drawable/button_circle_shape"
+        android:textColor="#ffffff"/>
     <Button
         android:id="@+id/confirm_destination_button"
         android:layout_width="wrap_content"
@@ -58,15 +60,28 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="64dp"
-        android:text="Confirm destination" />
+        android:text="Confirm destination"
+        android:background="@drawable/button_circle_shape"
+        android:textColor="#ffffff"/>
     <Button
         android:id="@+id/confirm_all_done"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="18dp"
-        android:text="Confirm the places selected and go back" />
+        android:layout_marginBottom="10dp"
+        android:text="Confirm the places selected and go back"
+        android:background="@drawable/button_circle_shape"
+        android:textColor="#ffffff"/>
+
+    <ImageView
+        android:id="@+id/go_to_website"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="70dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_website" />
 
 </RelativeLayout>
 

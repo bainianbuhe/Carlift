@@ -19,20 +19,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="See the starting point in Google Map"
-        android:id="@+id/see_request_start_point_button"
-        android:background="@drawable/button_circle_shape"
-        android:textColor="#ffffff"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/see_request_detail_destination_text"
-        android:gravity="center"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="See the destination in Google Map"
-        android:id="@+id/see_request_detail_destination_button"
+        android:text="See the starting place and destination in map"
+        android:id="@+id/see_request_detail_button"
         android:background="@drawable/button_circle_shape"
         android:textColor="#ffffff"/>
     <TextView

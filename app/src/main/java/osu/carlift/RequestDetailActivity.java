@@ -29,50 +29,38 @@ import java.util.List;
 import java.util.Map;
 
 public class RequestDetailActivity extends AppCompatActivity {
-    private TextView mPassengerUserName;
-    private TextView mStartingPoint;
-    private TextView mDestination;
-    private TextView mStartTime;
+
     private String driverUserName;
     private String passengerUserName;
     private String startingPoint;
     private String destination;
     private String startTime;
-    private Button mSeeStartPoint;
-    private Button mSeeDestination;
+    private Button mSeeInMap;
     private final String EXTRA_DRIVER_USERNAME="driver_user_name";
     private final String EXTRA_START_TIME="start_time";
     private final String EXTRA_START_POINT="start_point";
     private final String EXTRA_DESTINATION="destination";
     private final String EXTRA_PASSENGER_USERNAME="passenger_user_name";
+    private static final String EXTRA_START_ADDR="start_addr";
+    //private static final String EXTRA_DESTINATION="destination";
     private Button mAcceptButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_detail);
         getStrings();
-        mPassengerUserName=(TextView)findViewById(R.id.see_request_detail_passenger_name_text);
-        mPassengerUserName.setText("Username:"+passengerUserName);
-        mStartingPoint=(TextView)findViewById(R.id.see_request_detail_start_point_text);
-        mStartingPoint.setText("Starting Place:"+startingPoint);
-        mDestination=(TextView)findViewById(R.id.see_request_detail_destination_text);
-        mDestination.setText(    "Destination:"+ destination);
-        mStartTime=(TextView)findViewById(R.id.see_request_detail_starttime_text);
-        mStartTime.setText("Start Time:"+startTime);
-        mSeeStartPoint=(Button)findViewById(R.id.see_request_start_point_button);
-        mSeeStartPoint.setOnClickListener(new View.OnClickListener() {
+        mSeeInMap=(Button)findViewById(R.id.see_request_detail_button);
+        mSeeInMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                googleMapSearch(startingPoint);
+                Intent intent=new Intent(RequestDetailActivity.this,SeePlaceInMapActivity.class);
+                intent.putExtra(EXTRA_START_ADDR,startingPoint);
+                intent.putExtra(EXTRA_DESTINATION,destination);
+                startActivity(intent);
             }
         });
-        mSeeDestination=(Button)findViewById(R.id.see_request_detail_destination_button);
-        mSeeDestination.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                googleMapSearch(destination);
-            }
-        });
+
+
         mAcceptButton=(Button)findViewById(R.id.see_request_detail_accept);
         mAcceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
